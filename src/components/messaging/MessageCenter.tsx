@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Search, Send, User, Users, UserPlus, MoreVertical, Phone, Video } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,6 +23,7 @@ interface Message {
 
 interface Conversation {
   id: string;
+  title?: string; // Added optional title property to fix the error
   participants: {
     id: string;
     name: string;
@@ -479,7 +479,7 @@ const demoConversations: Conversation[] = [
   },
   {
     id: "conv-4",
-    title: "Réunion Pédagogique",
+    title: "Réunion Pédagogique", // This is now valid with the updated interface
     participants: [
       {
         id: "admin-1",

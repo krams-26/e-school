@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { SchoolIcon, Users, Award, MessageSquare, BookOpen, Calendar, CheckSquare } from "lucide-react";
+import { BookOpen, Users, Award, MessageSquare, Calendar, CheckSquare } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 
 const Index = () => {
@@ -31,6 +31,7 @@ const Index = () => {
   );
 };
 
+// Using the existing component renamed to avoid conflicts
 const SchoolIcon = BookOpen;
 
 const LandingPage = () => {

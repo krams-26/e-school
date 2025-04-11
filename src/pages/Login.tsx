@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { SchoolIcon } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import LoginForm from "@/components/auth/LoginForm";
 
 const Login = () => {
@@ -54,20 +54,9 @@ const FeatureItem = ({ text }: { text: string }) => (
   </div>
 );
 
+// Use BookOpen icon instead of creating a custom SchoolIcon component
 const SchoolIcon = ({ className }: { className?: string }) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    className={className}
-  >
-    <path d="m2 22 10-10 10 10" />
-    <path d="M4 15v-3a8 8 0 0 1 16 0v3" />
-  </svg>
+  <BookOpen className={className} />
 );
 
 export default Login;
