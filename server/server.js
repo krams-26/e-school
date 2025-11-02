@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import rateLimit from 'express-rate-limit';
 import authRoutes from './routes/auth.js';
 import usersRoutes from './routes/users.js';
@@ -10,7 +12,18 @@ import statsRoutes from './routes/stats.js';
 import classesRoutes from './routes/classes.js';
 import pointsRoutes from './routes/points.js';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Charger .env depuis le dossier server explicitement
+dotenv.config({ path: join(__dirname, '.env') });
+
+// Vérifier que JWT_SECRET est chargé, sinon utiliser fallback
+if (!process.env.JWT_SECRET) {
+  console.warn('⚠️  ATTENTION: JWT_SECRET n\'est pas défini dans .env');
+  console.warn('   Utilisation d\'un secret par défaut (changez en production !)');
+  process.env.JWT_SECRET = 'eschool_jwt_secret_key_change_in_production_2024';
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -61,5 +74,6 @@ app.listen(PORT, () => {
   console.log(`🚀 Serveur API E-School démarré sur le port ${PORT}`);
   console.log(`📍 Base de données: ${process.env.DB_NAME || 'eschool'}`);
   console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:8080'}`);
+  console.log(`🔑 JWT_SECRET: ${process.env.JWT_SECRET ? '✅ Défini' : '❌ Manquant'}`);
 });
 
