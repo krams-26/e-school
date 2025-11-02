@@ -33,10 +33,18 @@ const Login = () => {
           
           <LoginForm />
           
-          <div className="mt-8 text-center text-sm text-muted-foreground">
-            <Link to="/" className="hover:text-e-school-600 underline underline-offset-4">
+          <div className="mt-8 text-center text-sm text-muted-foreground space-y-2">
+            <Link to="/" className="hover:text-e-school-600 underline underline-offset-4 block">
               Retour à l'accueil
             </Link>
+            <a 
+              href="https://t.me/+243997204211" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-e-school-600 underline underline-offset-4 block"
+            >
+              Support & Assistance
+            </a>
             <p className="mt-4">
               &copy; {new Date().getFullYear()} E-School. Tous droits réservés.
             </p>

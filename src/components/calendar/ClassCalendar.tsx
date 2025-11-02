@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Calendar, Clock, Users, MapPin, CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, Clock, Users, MapPin, CalendarDays, ChevronLeft, ChevronRight, Book, FileText, Activity } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,19 @@ interface Event {
   for?: string[];
 }
 
+// Helper function to get day name and date in French format
+function getFrenchDate(date: Date): string {
+  const dayNames = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+  const monthNames = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 
+                      'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+  
+  const dayName = dayNames[date.getDay()];
+  const day = date.getDate();
+  const month = monthNames[date.getMonth()];
+  
+  return `${dayName} ${day} ${month}`;
+}
+
 const ClassCalendar: React.FC = () => {
   const [currentView, setCurrentView] = useState<"weekly" | "daily">("weekly");
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -37,10 +50,15 @@ const ClassCalendar: React.FC = () => {
   // Generate dates for the current week
   const weekDates = getWeekDates(currentDate);
   
+  // Regenerate events for current week based on currentDate
+  const currentWeekEvents = React.useMemo(() => {
+    return generateDemoEventsForWeek(currentDate);
+  }, [currentDate]);
+  
   // Get the events for the selected filter
   const filteredEvents = selectedFilter === "all" 
-    ? demoEvents
-    : demoEvents.filter(event => 
+    ? currentWeekEvents
+    : currentWeekEvents.filter(event => 
         !event.for || event.for.includes(selectedFilter)
       );
   
@@ -59,8 +77,15 @@ const ClassCalendar: React.FC = () => {
   
   // Get events for a specific date
   const getEventsForDate = (date: Date) => {
-    const dateStr = date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-    return filteredEvents.filter(event => event.date === dateStr);
+    const dateStr = getFrenchDate(date);
+    return filteredEvents.filter(event => {
+      // Comparer les dates normalisées (jour + mois)
+      const eventDay = event.date.split(' ')[1]; // Jour du mois
+      const eventMonth = event.date.split(' ')[2]; // Mois
+      const dateDay = dateStr.split(' ')[1];
+      const dateMonth = dateStr.split(' ')[2];
+      return eventDay === dateDay && eventMonth === dateMonth;
+    });
   };
   
   // Get the color for an event type
@@ -191,11 +216,7 @@ const ClassCalendar: React.FC = () => {
                   <h3 className={`text-lg font-medium py-2 px-4 rounded-lg ${
                     isToday(currentDate) ? "bg-e-school-100 text-e-school-800" : ""
                   }`}>
-                    {currentDate.toLocaleDateString('fr-FR', { 
-                      weekday: 'long', 
-                      day: 'numeric', 
-                      month: 'long'
-                    })}
+                    {getFrenchDate(currentDate)}
                   </h3>
                 </div>
                 
@@ -289,76 +310,74 @@ function isToday(date: Date) {
     date.getFullYear() === today.getFullYear();
 }
 
-// Import the necessary icons
-const Book = Calendar;
-const FileText = Calendar;
-const Activity = Calendar;
-
-// Demo data
-const demoEvents: (Event & { date: string })[] = [
-  {
-    id: "event-1",
-    title: "Mathématiques",
-    startTime: "08:00",
-    endTime: "09:00",
-    location: "Salle 102",
-    type: "class",
-    date: "lundi 11 avril",
-    for: ["3ème A"]
-  },
-  {
-    id: "event-2",
-    title: "Français",
-    startTime: "09:00",
-    endTime: "10:00",
-    location: "Salle 105",
-    type: "class",
-    date: "lundi 11 avril",
-    for: ["3ème A"]
-  },
-  {
-    id: "event-3",
+// Demo data - Generate events for a specific week
+function generateDemoEventsForWeek(weekDate: Date): (Event & { date: string })[] {
+  const events: (Event & { date: string })[] = [];
+  
+  // Get Monday of the specified week
+  const day = weekDate.getDay();
+  const diff = weekDate.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(weekDate);
+  monday.setDate(diff);
+  
+  // Add events for each day of the week
+  const eventTemplates = [
+    { title: "Mathématiques", start: "08:00", end: "09:00", location: "Salle 102", type: "class" as const },
+    { title: "Français", start: "09:15", end: "10:15", location: "Salle 105", type: "class" as const },
+    { title: "Sciences", start: "10:30", end: "11:30", location: "Salle 201", type: "class" as const },
+    { title: "Histoire-Géographie", start: "14:00", end: "15:00", location: "Salle 103", type: "class" as const },
+  ];
+  
+  for (let i = 0; i < 5; i++) {
+    const currentDate = new Date(monday);
+    currentDate.setDate(monday.getDate() + i);
+    const dateStr = getFrenchDate(currentDate);
+    
+    eventTemplates.forEach((template, index) => {
+      events.push({
+        id: `event-${i}-${index}`,
+        title: template.title,
+        startTime: template.start,
+        endTime: template.end,
+        location: template.location,
+        type: template.type,
+        date: dateStr,
+        for: ["3ème A"]
+      });
+    });
+  }
+  
+  // Add special events
+  const wednesday = new Date(monday);
+  wednesday.setDate(monday.getDate() + 2);
+  events.push({
+    id: "event-exam",
     title: "Examen de Sciences",
     description: "Chapitres 5 à 8",
     startTime: "14:00",
     endTime: "16:00",
     location: "Salle 201",
     type: "exam",
-    date: "mardi 12 avril",
+    date: getFrenchDate(wednesday),
     for: ["3ème A"]
-  },
-  {
-    id: "event-4",
+  });
+  
+  const thursday = new Date(monday);
+  thursday.setDate(monday.getDate() + 3);
+  events.push({
+    id: "event-meeting",
     title: "Réunion parents-professeurs",
     description: "Bilan du trimestre",
     startTime: "18:00",
     endTime: "20:00",
     location: "Amphithéâtre",
     type: "meeting",
-    date: "jeudi 14 avril",
+    date: getFrenchDate(thursday),
     for: ["teachers", "parents"]
-  },
-  {
-    id: "event-5",
-    title: "Sport",
-    startTime: "10:00",
-    endTime: "12:00",
-    location: "Gymnase",
-    type: "class",
-    date: "mercredi 13 avril",
-    for: ["4ème B"]
-  },
-  {
-    id: "event-6",
-    title: "Sortie au musée",
-    description: "Visite guidée",
-    startTime: "13:00",
-    endTime: "17:00",
-    location: "Musée d'Histoire",
-    type: "activity",
-    date: "vendredi 15 avril",
-    for: ["5ème C"]
-  }
-];
+  });
+  
+  return events;
+}
+
 
 export default ClassCalendar;

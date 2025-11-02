@@ -1,73 +1,99 @@
-# Welcome to your Lovable project
+# E-School - Plateforme de gestion scolaire
 
-## Project info
+Plateforme complète de gestion scolaire connectant enseignants, élèves, parents et administrateurs.
 
-**URL**: https://lovable.dev/projects/e1ff4b66-dfe5-4eb6-bfb6-d2e16f7d7805
+## Technologies utilisées
 
-## How can I edit this code?
+- **Frontend**: React 18 + TypeScript + Vite
+- **Backend**: Node.js + Express
+- **Base de données**: MySQL
+- **UI**: Tailwind CSS + shadcn/ui
+- **Authentification**: JWT
 
-There are several ways of editing your application.
+## Installation
 
-**Use Lovable**
+### Prérequis
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e1ff4b66-dfe5-4eb6-bfb6-d2e16f7d7805) and start prompting.
+- Node.js (v18 ou supérieur)
+- MySQL (via WAMP/XAMPP)
+- npm ou yarn
 
-Changes made via Lovable will be committed automatically to this repo.
+### Étapes d'installation
 
-**Use your preferred IDE**
+1. **Installer les dépendances frontend**
+```bash
+npm install
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+2. **Installer les dépendances backend**
+```bash
+cd server
+npm install
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. **Configurer la base de données**
 
-Follow these steps:
+Créer la base de données `eschool` dans MySQL, puis:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```bash
+cd server
+npm run migrate
+npm run seed
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+4. **Configurer les variables d'environnement**
 
-# Step 3: Install the necessary dependencies.
-npm i
+Créez `server/.env`:
+```
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=eschool
+DB_PORT=3306
+JWT_SECRET=votre_secret_jwt_securise
+PORT=3000
+FRONTEND_URL=http://localhost:8080
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Créez `.env` à la racine:
+```
+VITE_API_URL=http://localhost:3000/api
+```
+
+5. **Démarrer l'application**
+
+**Terminal 1 - Backend:**
+```bash
+cd server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+**Terminal 2 - Frontend:**
+```bash
+npm run dev
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Accès à l'application
 
-**Use GitHub Codespaces**
+- Frontend: http://localhost:8080
+- Backend API: http://localhost:3000/api
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Comptes de démonstration
 
-## What technologies are used for this project?
+- **Administrateur**: admin@eschool.com / password
+- **Enseignant**: teacher@eschool.com / password
+- **Élève**: student@eschool.com / password
+- **Parent**: parent@eschool.com / password
 
-This project is built with:
+## Support & Assistance
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Pour toute assistance ou support technique, contactez-nous via Telegram:
+- **Support**: [Contact Telegram](https://t.me/+243997204211)
 
-## How can I deploy this project?
+## Développement
 
-Simply open [Lovable](https://lovable.dev/projects/e1ff4b66-dfe5-4eb6-bfb6-d2e16f7d7805) and click on Share -> Publish.
+Développé avec ❤️ par [Ramazani L. Kevin] pour faciliter la gestion scolaire.
 
-## Can I connect a custom domain to my Lovable project?
+## Licence
 
-Yes it is!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Tous droits réservés © 2024 E-School

@@ -23,8 +23,23 @@ const Index = () => {
       </main>
       
       <footer className="bg-white border-t py-6">
-        <div className="container text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} E-School. Tous droits réservés.
+        <div className="container">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+            <div>
+              &copy; {new Date().getFullYear()} E-School. Tous droits réservés.
+            </div>
+            <div className="flex items-center gap-4">
+              <a 
+                href="https://t.me/+243997204211" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-e-school-600 transition-colors flex items-center gap-2"
+              >
+                <MessageSquare className="h-4 w-4" />
+                Support & Assistance
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
