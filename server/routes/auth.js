@@ -48,7 +48,7 @@ router.post('/login',
       res.json({
         token,
         user: {
-          id: user.id,
+          id: String(user.id),
           name: user.name,
           email: user.email,
           role: user.role,
@@ -74,7 +74,16 @@ router.get('/me', authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'Utilisateur non trouvé' });
     }
 
-    res.json({ user: users[0] });
+    const user = users[0];
+    res.json({ 
+      user: {
+        id: String(user.id),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar
+      }
+    });
   } catch (error) {
     console.error('Get user error:', error);
     res.status(500).json({ error: 'Erreur serveur' });
